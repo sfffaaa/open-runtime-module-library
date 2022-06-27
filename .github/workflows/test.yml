@@ -23,7 +23,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
   build:
-    runs-on: custom-runner-AWS
+    runs-on: custom-runner-AWS1
     env:
       SCCACHE_CACHE_SIZE: "50G"
     needs: cancel
@@ -52,3 +52,4 @@ jobs:
       run: make dev-check
     - name: Run tests
       run: make dev-test
+tgfg
