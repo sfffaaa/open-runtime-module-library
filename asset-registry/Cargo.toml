@@ -19,10 +19,10 @@ sp-runtime = { git = "https://github.com/peaqnetwork/substrate", default-feature
 sp-std = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.38" }
 
 # polkadot
-pallet-xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "release-v0.9.38" }
-xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "release-v0.9.38" }
-xcm-builder = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "release-v0.9.38" }
-xcm-executor = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "release-v0.9.38" }
+pallet-xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.38" }
+xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.38" }
+xcm-builder = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.38" }
+xcm-executor = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.38" }
 
 # orml
 orml-traits = { path = "../traits", version = "0.4.1-dev", default-features = false }
@@ -41,9 +41,9 @@ cumulus-pallet-xcm = { git = "https://github.com/peaqnetwork/cumulus", branch = 
 parachain-info = { git = "https://github.com/peaqnetwork/cumulus", branch = "peaq-polkadot-v0.9.38" }
 
 # polkadot
-polkadot-parachain = { git = "https://github.com/peaqnetwork/polkadot", branch = "release-v0.9.38" }
-polkadot-runtime-parachains = { git = "https://github.com/peaqnetwork/polkadot", branch = "release-v0.9.38" }
-xcm-simulator = { git = "https://github.com/peaqnetwork/polkadot", branch = "release-v0.9.38" }
+polkadot-parachain = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.38" }
+polkadot-runtime-parachains = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.38" }
+xcm-simulator = { git = "https://github.com/peaqnetwork/polkadot", branch = "peaq-polkadot-v0.9.38" }
 
 # orml
 orml-tokens = { path = "../tokens" }

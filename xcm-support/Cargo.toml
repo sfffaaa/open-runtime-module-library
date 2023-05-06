@@ -14,8 +14,8 @@ frame-support = { git = "https://github.com/peaqnetwork/substrate", default-feat
 sp-runtime = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.38" }
 sp-std = { git = "https://github.com/peaqnetwork/substrate", default-features = false , branch = "peaq-polkadot-v0.9.38" }
 
-xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "release-v0.9.38" }
-xcm-executor = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "release-v0.9.38" }
+xcm = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.38" }
+xcm-executor = { git = "https://github.com/peaqnetwork/polkadot", default-features = false , branch = "peaq-polkadot-v0.9.38" }
 
 orml-traits = { path = "../traits", version = "0.4.1-dev", default-features = false }
 
