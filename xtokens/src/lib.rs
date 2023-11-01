@@ -889,8 +889,16 @@ pub mod module {
 							},
 						]),
 					};
-					return T::Weigher::weight(&mut msg)
+					let data = T::Weigher::weight(&mut msg)
 						.map_or(Weight::max_value(), |w| T::BaseXcmWeight::get().saturating_add(w));
+					log::error!(
+						target: "xtokens",
+						"weight_of_transfer_multiasset: asset: {:?}, dest: {:?}, weight: {:?}",
+						asset,
+						dest,
+						data
+					);
+					return data;
 				}
 			}
 			Weight::zero()
