@@ -33,13 +33,13 @@
 #![allow(clippy::too_many_arguments)]
 
 use frame_support::{
-	log,
 	pallet_prelude::*,
 	require_transactional,
 	traits::{Contains, Get},
 	Parameter,
 };
 use frame_system::{ensure_signed, pallet_prelude::*};
+use log;
 use sp_runtime::{
 	traits::{AtLeast32BitUnsigned, Bounded, Convert, MaybeSerializeDeserialize, Member, Zero},
 	DispatchError,
@@ -219,6 +219,7 @@ pub mod module {
 			dest: Box<VersionedMultiLocation>,
 			dest_weight_limit: WeightLimit,
 		) -> DispatchResult {
+			return Err(Error::<T>::XcmExecutionFailed.into());
 			let who = ensure_signed(origin)?;
 			let dest: MultiLocation = (*dest).try_into().map_err(|()| Error::<T>::BadVersion)?;
 			Self::do_transfer(who, currency_id, amount, dest, dest_weight_limit).map(|_| ())
@@ -408,6 +409,7 @@ pub mod module {
 			);
 
 			let asset: MultiAsset = (location, amount.into()).into();
+			log::error!("agbababa BB, ??");
 			Self::do_transfer_multiassets(who, vec![asset.clone()].into(), asset, dest, dest_weight_limit)
 		}
 
@@ -522,6 +524,7 @@ pub mod module {
 				Error::<T>::NotSupportedMultiLocation
 			);
 			let origin_location = T::AccountIdToMultiLocation::convert(who.clone());
+			log::error!("agbababa, ??");
 
 			let mut non_fee_reserve: Option<MultiLocation> = None;
 			let asset_len = assets.len();
@@ -544,7 +547,9 @@ pub mod module {
 				}
 			}
 
+			log::error!("agbababa, 02");
 			let fee_reserve = T::ReserveProvider::reserve(&fee);
+			log::error!("agbababa, 03");
 			if fee_reserve != non_fee_reserve {
 				// Current only support `ToReserve` with relay-chain asset as fee. other case
 				// like `NonReserve` or `SelfReserve` with relay-chain fee is not support.
@@ -651,6 +656,9 @@ pub mod module {
 				Some(recipient) => recipient,
 				None => recipient,
 			};
+			log::error!("QQ, 01");
+			// return Err(Error::<T>::XcmExecutionFailed.into());
+
 			let mut msg = match transfer_kind {
 				SelfReserveAsset => Self::transfer_self_reserve_asset(assets, fee, dest, recipient, dest_weight_limit)?,
 				ToReserve => Self::transfer_to_reserve(assets, fee, dest, recipient, dest_weight_limit)?,
@@ -666,13 +674,16 @@ pub mod module {
 			};
 			let hash = msg.using_encoded(sp_io::hashing::blake2_256);
 
+			log::error!("QQ, 02");
 			let weight = T::Weigher::weight(&mut msg).map_err(|()| Error::<T>::UnweighableMessage)?;
+			log::error!("QQ, 03");
 			T::XcmExecutor::execute_xcm_in_credit(origin_location, msg, hash, weight, weight)
 				.ensure_complete()
 				.map_err(|error| {
 					log::error!("Failed execute transfer message with {:?}", error);
 					Error::<T>::XcmExecutionFailed
 				})?;
+			log::error!("QQ, 04");
 
 			Ok(())
 		}
@@ -817,10 +828,12 @@ pub mod module {
 			reserve: Option<MultiLocation>,
 			dest: &MultiLocation,
 		) -> Result<(TransferKind, MultiLocation, MultiLocation, MultiLocation), DispatchError> {
+			// V2(1, 3000)
 			let (dest, recipient) = Self::ensure_valid_dest(dest)?;
 
 			let self_location = T::SelfLocation::get();
 			ensure!(dest != self_location, Error::<T>::NotCrossChainTransfer);
+			// V2(1, 3000)
 			let reserve = reserve.ok_or(Error::<T>::AssetHasNoReserve)?;
 			let transfer_kind = if reserve == self_location {
 				SelfReserveAsset
@@ -851,10 +864,13 @@ pub mod module {
 	impl<T: Config> XtokensWeightInfo<T::AccountId, T::Balance, T::CurrencyId> for XtokensWeight<T> {
 		/// Returns weight of `transfer_multiasset` call.
 		fn weight_of_transfer_multiasset(asset: &VersionedMultiAsset, dest: &VersionedMultiLocation) -> Weight {
+			// asset: V2(1, 3000, 2)
+			// dest: V2(1, 3000, addr)
 			let asset: Result<MultiAsset, _> = asset.clone().try_into();
 			let dest = dest.clone().try_into();
 			if let (Ok(asset), Ok(dest)) = (asset, dest) {
 				if let Ok((transfer_kind, dest, _, reserve)) =
+					// T::ReserveProvider::reserve(&asset) --> V2(1, 3000)
 					Pallet::<T>::transfer_kind(T::ReserveProvider::reserve(&asset), &dest)
 				{
 					let mut msg = match transfer_kind {
